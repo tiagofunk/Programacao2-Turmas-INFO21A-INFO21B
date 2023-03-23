@@ -25,7 +25,7 @@ function clickou(){
 } 
 d.addEventListener("click", clickou)
 
-d.addEventListener("mouseenter",()=>{
+d.addEventListener("mouseenter",function() {
     d.innerText = "Entrou"
 })
 
