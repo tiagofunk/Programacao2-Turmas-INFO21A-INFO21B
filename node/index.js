@@ -1,3 +1,9 @@
+// npm init
+// npm install --save-dev nodemon
+// npm install express body-parser
+// Adicionar "start": "nodemon index.js" no arquivo package.json
+// npm start
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
