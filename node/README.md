@@ -2,8 +2,8 @@
 
 - Crie uma pasta para você trabalhar.
 - Abra essa pasta no vs code.
-- Abra terminal no menu Terminal -> Novo Terminal
-- Digite o comando para iniciar o projeto e vá apertando ENTER para confirmar as configuraões do projeto:
+- Abra o terminal no menu Terminal -> Novo Terminal
+- Digite o comando para iniciar o projeto e vá apertando ENTER para confirmar as configurações do projeto:
 
 		npm init
 - Para instalar a extensão que reinicia a aplicação automaticamente:
@@ -12,7 +12,7 @@
 - Para instalar a dependência para funcionar o servidor e o leitor de json:
 		
 		npm install express body-parser
-- Abra o arquivo `package.json` e adicione a seguinte linha em scripts (não se esqueça da vírgual no final da linha anterior):
+- Abra o arquivo `package.json` e adicione a seguinte linha em scripts (não se esqueça da vírgula no final da linha anterior):
 
 		"start": "nodemon index.js"
 
