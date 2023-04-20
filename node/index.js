@@ -13,67 +13,61 @@ app.listen(3000)
 const jsonParser = bodyParser.json()
 
 const pessoas = [
-  {id:1, name:"Tiago"},
-  {id:2, name:"Viviane"},
-  {id:3, name:"Ana"},
+  {id:1, nome:"Tiago"},
+  {id:2, nome:"Viviane"},
+  {id:3, nome:"Ana"},
 ]
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
+app.get('/', function (requisicao,resposta) {
+  resposta.send('Hello World')
 })
 
-app.get("/pessoas/", function (req,res){
-  res.send( pessoas )
+app.get("/pessoas/", function (requisicao,resposta){
+  resposta.send( pessoas )
 })
 
-app.get("/pessoas/:id", function(req,res){
-  var p = pessoas.find( function( c ){
-    return c.id == parseInt(req.params.id )
+app.get("/pessoas/:id", function(requisicao,resposta){
+  var pessoaEncontrada = pessoas.find( function( pessoaAtual ){
+    return pessoaAtual.id == parseInt(requisicao.params.id )
   } )
-  if( !p ){
-    //res.status( 404 ).send({})
-    res.status( 404 ).send("Pessoa não encontrada")
+  if( !pessoaEncontrada ){
+    res.status( 404 ).send({})
   }else{
-    res.send( p )
+    resposta.send( pessoaEncontrada )
   }
 })
 
-app.post("/pessoas/", jsonParser, function( req, res ){
-  var novo = salvarPessoa( req.body )
-  res.send( novo );
+app.post("/pessoas/", jsonParser, function( requisicao, resposta ){
+  const novaPessoa = {
+    id: pessoas.length + 1,
+    nome: requisicao.body.nome
+  };
+  pessoas.push( novaPessoa );
+  resposta.send( novaPessoa );
 });
 
-function salvarPessoa(body){
-  const novo = {
-    id: pessoas.length + 1,
-    name: body.name
-  };
-  pessoas.push( novo );
-  return novo;
-}
-
-app.put("/pessoas/:id",jsonParser, function(req,res){
-  const achado = pessoas.find(
-    c => c.id === parseInt( req.params.id )
+app.put("/pessoas/:id",jsonParser, function(requisicao,resposta){
+  const pessoaEncontrada = pessoas.find( function( pessoaAtual ){
+    return pessoaAtual.id == parseInt( requisicao.params.id )
+  }
   )
-  if( !achado ){
-    res.status( 404 ).send( "A pessoa com esse id não foi encontrado" )
+  if( !pessoaEncontrada ){
+    resposta.status( 404 ).send({})
   }else{
-    achado.name = req.body.name
-    res.send( achado )
+    pessoaEncontrada.nome = requisicao.body.nome
+    resposta.send( pessoaEncontrada )
   }
 });
 
 app.delete("/pessoas/:id", jsonParser, function(req, res){
-  const achado = pessoas.find(
-    c => c.id === parseInt( req.params.id )
-  );
-  if( !achado ){
+  const pessoaEncontrada = pessoas.find( function( pessoaAtual ){
+    return pessoaAtual.id == parseInt( req.params.id )
+  });
+  if( !pessoaEncontrada ){
     res.status( 404 ).send( "A pessoa com esse id não foi encontrado" );
   }else{
-    const index = pessoas.indexOf( achado );
+    const index = pessoas.indexOf( pessoaEncontrada );
     pessoas.splice( index, 1 );
-
-    res.send( achado );
+    res.send( pessoaEncontrada );
   }
 });
