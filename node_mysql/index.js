@@ -1,23 +1,11 @@
-// npm init
-// npm install --save-dev nodemon
-// npm install express body-parser mysql
-// Adicionar "start": "nodemon index.js" no arquivo package.json
-// npm start
-
-// create database node;
-// use node;
-// create table pessoas(
-// 	id int primary key auto_increment,
-//     nome varchar(30),
-//     idade int
-// );
-// CREATE USER 'node'@'%' IDENTIFIED WITH mysql_native_password BY 'Abcd&123';
-// GRANT ALL ON node.* TO 'node'@'%';
-
 const express = require('express')
 const bodyParser = require('body-parser')
-const app = express()
 var mysql = require('mysql')
+
+const app = express()
+const jsonParser = bodyParser.json()
+
+app.listen(3000)
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -28,16 +16,8 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
   if (err) throw err;
-  console.log("Connected!");
+  console.log("Conectado!");
 });
-
-app.listen(3000)
-
-const jsonParser = bodyParser.json()
-
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
 
 app.get("/pessoas/", function (req,res){
   var sql = "SELECT * FROM pessoas"
@@ -83,7 +63,7 @@ app.put("/pessoas/:id",jsonParser, function(req,res){
       res.status( 404 ).send( {} )
     }else{
       const novaPessoa = {
-        id: result.insertId,
+        id: req.params.id,
         nome: req.body.nome,
         idade:req.body.idade
       };
