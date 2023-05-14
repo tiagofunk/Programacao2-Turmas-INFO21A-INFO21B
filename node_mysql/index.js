@@ -9,7 +9,7 @@ app.listen(3000)
 
 var con = mysql.createConnection({
   host: "localhost",
-  user: "node",
+  user: "nodeApp",
   password: "Abcd&123",
   database: "node"
 });
@@ -17,6 +17,13 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   console.log("Conectado!");
+});
+
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  next();
 });
 
 app.get("/pessoas/", function (req,res){

@@ -1,0 +1,42 @@
+
+#container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: xx-large;
+}
+
+#tabelaPessoas{
+    width: 100%;
+}
+
+#linhaPessoas{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border-bottom: .1rem solid gray;
+}
+
+#item{
+    width: 10%;
+}
+
+#areaBotao{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#botaoAdicionar{
+    width: 5rem;
+    height: 5rem;
+    margin-top: 2rem;
+    border-radius: 50%;
+    border: none;
+    background-color: steelblue;
+    font-size: xx-large;
+}

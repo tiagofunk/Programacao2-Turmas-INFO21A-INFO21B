@@ -1,0 +1,29 @@
+#container{
+    width: 100%;
+    font-size: x-large;
+}
+
+#formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.campo{
+    background-color: white;
+    border: none;
+    border-bottom: .1rem solid gray;
+    width: 40%;
+    text-align: center;
+}
+
+.elementoFormulario{
+    margin-top: 1rem;
+    outline: none;
+    font-size: x-large;
+}
+
+#erro{
+    display: none;
+    color: red;
+}
