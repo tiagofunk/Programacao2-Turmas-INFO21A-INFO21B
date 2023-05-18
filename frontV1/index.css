@@ -11,16 +11,24 @@
     width: 100%;
 }
 
-#linhaPessoas{
+.linhaPessoas{
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    column-gap: 10%;
     border-bottom: .1rem solid gray;
 }
 
-#item{
+.item{
     width: 10%;
+    margin-left: 5%;
+}
+
+.lixeira{
+    width: 10%;
+    margin-top: 2rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 #areaBotao{
