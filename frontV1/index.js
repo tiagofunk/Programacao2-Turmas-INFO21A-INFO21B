@@ -26,13 +26,14 @@ function adicionarPessoas(){
         const pessoa = listaPessoas[i];
         tabelaPessoas.innerHTML += criarLinhaPessoas(pessoa)
     }
+    cadastrarEventosLixeira()
 }
+
 fetch(URL).then(function(response) {
     return response.json();
 }).then(function(data) {
     listaPessoas = data
     adicionarPessoas()
-    cadastrarEventosLixeira()
 }).catch(function() {
     console.log("Houve algum problema!");
 });
@@ -68,7 +69,8 @@ function cadastrarEventosLixeira(){
     for (let i = 0; i < lixeiras.length; i++) {
         const l = lixeiras[i];
         l.addEventListener("click",function(event){
-            realizarExclusao(event.target.parentElement.children[0].innerText)
+            var id = event.target.parentElement.children[0].innerText
+            realizarExclusao(id)
         })
 }
 }
