@@ -19,10 +19,8 @@ botaoAdicionar.addEventListener("click", function(){
     var idadePessoa = parseInt( document.getElementById("campoIdade").value )
 
     if( idPessoa != null ){
-        //console.log("PUT");
         enviaPUT(idPessoa, nomePessoa, idadePessoa)
     }else{
-        //console.log("POST");
         enviaPOST( nomePessoa, idadePessoa )
     }
 })
