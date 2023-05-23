@@ -6,6 +6,7 @@ function iniciarTabela(){
                 <p class="item">Id</p>
                 <p class="item">Nome</p>
                 <p class="item">Idade</p>
+                <p class="item">Alterar</p>
                 <p class="item">Excluir</p>
             </div>`;
 }
@@ -15,7 +16,8 @@ function criarLinhaPessoas(pessoa){
                 <p class="item">`+pessoa.id+`</p>
                 <p class="item">`+pessoa.nome+`</p>
                 <p class="item">`+pessoa.idade+`</p>
-                <img class="lixeira item" src="../img/lixeira.png" alt="">
+                <p class="item"><img class="icone lapis" src="../img/lapis.jpg" alt="icone lápis"></p>
+                <p class="item"><img class="icone lixeira" src="../img/lixeira.png" alt="icone lixeira"></p>
             </div>`;
 }
 
@@ -26,6 +28,7 @@ function adicionarPessoas(){
         const pessoa = listaPessoas[i];
         tabelaPessoas.innerHTML += criarLinhaPessoas(pessoa)
     }
+    cadastrarEventosLapis()
     cadastrarEventosLixeira()
 }
 
@@ -69,8 +72,25 @@ function cadastrarEventosLixeira(){
     for (let i = 0; i < lixeiras.length; i++) {
         const l = lixeiras[i];
         l.addEventListener("click",function(event){
-            var id = event.target.parentElement.children[0].innerText
+            var id = event.target.parentElement.parentElement.children[0].innerText
             realizarExclusao(id)
         })
+    }
 }
+
+function editarURL(url, id, nome, idade){
+    return url+'?id='+id+'&nome='+nome+'&idade='+idade
+}
+
+function cadastrarEventosLapis(){
+    var lapis = document.getElementsByClassName("lapis")
+    for (let i = 0; i < lapis.length; i++) {
+        const l = lapis[i];
+        l.addEventListener("click",function(event){
+            var id = event.target.parentElement.parentElement.children[0].innerText
+            var nome = event.target.parentElement.parentElement.children[1].innerText
+            var idade = event.target.parentElement.parentElement.children[2].innerText
+            window.location.href = editarURL("adicionar.html",id,nome,idade);
+        })
+    }
 }

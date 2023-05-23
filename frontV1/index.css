@@ -15,20 +15,19 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    column-gap: 10%;
+    column-gap: 3%;
     border-bottom: .1rem solid gray;
 }
 
-.item{
+.icone{
     width: 10%;
-    margin-left: 5%;
-}
-
-.lixeira{
-    width: 10%;
-    margin-top: 2rem;
     width: 2rem;
     height: 2rem;
+}
+
+.item{
+    width: 15%;
+    margin-left: 3%;
 }
 
 #areaBotao{
