@@ -10,7 +10,7 @@ app.listen(3000)
 var con = mysql.createConnection({
   host: "localhost",
   user: "nodeApp",
-  password: "Abcd&123",
+  password: "Abcd&1234",
   database: "node"
 });
 
