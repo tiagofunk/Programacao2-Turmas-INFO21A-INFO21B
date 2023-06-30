@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="formulario">
+        <input id="inputImage" type="file" name="image" accept="image/*"/>
+        <button id="botaoUpload" type="button">Upload</button>
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        $("#formulario").on("click",function(event){
+            console.log(1);
+            event.preventDefault()
+            var inputImage = document.getElementById("inputImage")
+            var image = inputImage.files[0]
+            var formData = new FormData()
+            formData.append('file', image)
+            $.ajax({
+                type:'POST',
+                url: "http://localhost:3000/upload/img/",
+                data:formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                enctype: 'multipart/form-data',
+                success:function(data){
+                    console.log("success");
+                    console.log(data);
+                },
+                error: function(data){
+                    console.log("error");
+                    console.log(data);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
