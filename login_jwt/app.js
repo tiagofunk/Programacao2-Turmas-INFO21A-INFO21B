@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+var cookieParser = require('cookie-parser')
 const banco = require("./banco")
 const Usuario = require("./Usuario")
 
@@ -20,6 +21,7 @@ async function encontrarUsuarioPorId(id){
 const portaServidor = 3000
 const app = express()
 app.use(express.json())
+app.use(cookieParser())
 banco.conexao.sync( function(){
   console.log("Banco de dados conectado.");
 })
@@ -89,20 +91,22 @@ app.post("/auth/user/", async(req,res)=>{
 
     const token = jwt.sign({
       id:usuario.id
-    }, secret )
+    }, secret, { expiresIn: 24*60*60 } )
 
     await Usuario.Usuario.update({
       token: token
   },{
       where:{id: usuario.id}
   })
-    res.status(200).json({msg:"Autenticação realizada com sucesso!",token})
+  res.cookie('auth',token);
+  res.status(200).json({msg:"Autenticação realizada com sucesso!"})
   }catch(error){
     console.log(error);
     return res.status(500).send({msg:"Erro no servidor. Tente novamente mais tarde!"})
   }
 })
 
+// Adicionar o checkToken em todos as URLS que você quer proteger.
 app.get("/user/:id", checkToken, async(req,res) => {
   const id = req.params.id
   const usuario = await encontrarUsuarioPorId(id)
@@ -111,7 +115,8 @@ app.get("/user/:id", checkToken, async(req,res) => {
   }
   
   // Adicionar depois para mostrar que só esta logado.
-  if( usuario.token != req.headers["authorization"].split(" ")[1]){
+  const token = req.cookies.auth;
+  if( usuario.token != token){
     return res.status(401).send({msg:"Acesso Negado!"})
   }
   console.log(usuario.hash)
@@ -121,17 +126,33 @@ app.get("/user/:id", checkToken, async(req,res) => {
 })
 
 function checkToken(req,res,next){
-  const authHeader = req.headers["authorization"]
-  const token = authHeader && authHeader.split(" ")[1]
-  if( !token ){
+  const token = req.cookies.auth;
+
+  if (token) {
+
+    jwt.verify(token, process.env.SECRET, function(err, token_data) {
+      if (err) {
+         return res.status(400).send({msg:"Token inválido"})
+      } else {
+        req.user_data = token_data;
+        next();
+      }
+    });
+
+  } else {
     return res.status(401).send({msg:"Acesso Negado!"})
   }
+  // const authHeader = req.headers["authorization"]
+  // const token = authHeader && authHeader.split(" ")[1]
+  // if( !token ){
+  //   return res.status(401).send({msg:"Acesso Negado!"})
+  // }
 
-  try{
-    const secret = process.env.SECRET
-    jwt.verify(token,secret)
-    next()
-  }catch(error){
-    res.status(400).send({msg:"Token inválido"})
-  }
+  // try{
+  //   const secret = process.env.SECRET
+  //   jwt.verify(token,secret)
+  //   next()
+  // }catch(error){
+  //   res.status(400).send({msg:"Token inválido"})
+  // }
 }
