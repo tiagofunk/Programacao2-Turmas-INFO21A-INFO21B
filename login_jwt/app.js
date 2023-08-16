@@ -3,11 +3,13 @@ const express = require('express')
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 var cookieParser = require('cookie-parser')
+const https = require('https')
+const fs = require(`fs`);
 const banco = require("./banco")
 const Usuario = require("./Usuario")
 
 async function encontrarUsuarioPorEmail(email){
-  const resultado = await await Usuario.Usuario.findAll({
+  const resultado = await Usuario.Usuario.findAll({
     where:{ email:email }
   })
   if( resultado.length == 0 ) return null
@@ -25,9 +27,15 @@ app.use(cookieParser())
 banco.conexao.sync( function(){
   console.log("Banco de dados conectado.");
 })
-app.listen(portaServidor,()=>{
+
+var options =  {
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync("cert.pem"),
+  }
+
+https.createServer(options, app).listen(portaServidor,()=>{
   console.log("Servidor conectado na porta "+ portaServidor);
-})
+});
 
 app.get("/",(req,res)=>{
   res.status(200).json({msg:"Sucesso"})
@@ -119,7 +127,6 @@ app.get("/user/:id", checkToken, async(req,res) => {
   if( usuario.token != token){
     return res.status(401).send({msg:"Acesso Negado!"})
   }
-  console.log(usuario.hash)
   delete usuario.hash
   delete usuario.token
   res.status(200).send({id:usuario.id, nome:usuario.nome,email:usuario.email})
@@ -142,17 +149,4 @@ function checkToken(req,res,next){
   } else {
     return res.status(401).send({msg:"Acesso Negado!"})
   }
-  // const authHeader = req.headers["authorization"]
-  // const token = authHeader && authHeader.split(" ")[1]
-  // if( !token ){
-  //   return res.status(401).send({msg:"Acesso Negado!"})
-  // }
-
-  // try{
-  //   const secret = process.env.SECRET
-  //   jwt.verify(token,secret)
-  //   next()
-  // }catch(error){
-  //   res.status(400).send({msg:"Token inválido"})
-  // }
 }
