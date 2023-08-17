@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 var cookieParser = require('cookie-parser')
 const https = require('https')
 const fs = require(`fs`);
+const cors = require('cors');
 const banco = require("./banco")
 const Usuario = require("./Usuario")
 
@@ -27,6 +28,17 @@ app.use(cookieParser())
 banco.conexao.sync( function(){
   console.log("Banco de dados conectado.");
 })
+
+const corsOptions = {
+  origin: ['http://127.0.0.1:5500'],
+  methods: 'GET,POST'
+};
+
+app.use(cors(corsOptions));
+
+// app.listen(portaServidor,()=>{
+//   console.log("Servidor rodando na porta "+portaServidor);
+// })
 
 var options =  {
     key: fs.readFileSync("key.pem"),
