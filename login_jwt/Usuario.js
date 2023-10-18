@@ -20,10 +20,6 @@ var Usuario = banco.conexao.define(
         hash:{
             type:sequelize.STRING,
             allowNull:false
-        },
-        token:{
-            type:sequelize.STRING,
-            allowNull:false
         }
     }
 )

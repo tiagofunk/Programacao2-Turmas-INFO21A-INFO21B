@@ -81,8 +81,7 @@ app.post('/auth/register/',async(req,res)=>{
   const resultado = await Usuario.Usuario.create({
     "nome":name,
     "email":email,
-    "hash":passwordHash,
-    "token":""
+    "hash":passwordHash
   })
   res.status(201).send({msg:"Usuário criado com sucesso"})
 })
@@ -113,11 +112,6 @@ app.post("/auth/user/", async(req,res)=>{
       id:usuario.id
     }, secret, { expiresIn: 24*60*60 } )
 
-    await Usuario.Usuario.update({
-      token: token
-  },{
-      where:{id: usuario.id}
-  })
   res.cookie('auth',token);
   res.status(200).json({msg:"Autenticação realizada com sucesso!"})
   }catch(error){
@@ -135,12 +129,12 @@ app.get("/user/:id", checkToken, async(req,res) => {
   }
   
   // Adicionar depois para mostrar que só esta logado.
-  const token = req.cookies.auth;
-  if( usuario.token != token){
+  var infoToken = jwt.verify(req.cookies.auth, process.env.SECRET);
+  console.log(infoToken.id)
+  if( usuario.id != infoToken.id){
     return res.status(401).send({msg:"Acesso Negado!"})
   }
-  delete usuario.hash
-  delete usuario.token
+
   res.status(200).send({id:usuario.id, nome:usuario.nome,email:usuario.email})
 })
 
@@ -153,7 +147,6 @@ function checkToken(req,res,next){
       if (err) {
          return res.status(400).send({msg:"Token inválido"})
       } else {
-        req.user_data = token_data;
         next();
       }
     });
