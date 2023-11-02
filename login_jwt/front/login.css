@@ -1,0 +1,19 @@
+#formulario{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin: auto;
+    border: 0.1em solid gray;
+    padding: 1em;
+    border-radius: 5%;
+}
+
+#botaoLogin{
+    margin-top: 2em;
+    height: 2em;
+}
+
+#mensagemErro{
+    display: none;
+    color: red;
+}
