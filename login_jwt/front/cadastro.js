@@ -25,12 +25,13 @@ function enviaPOST( name, email, password, confirmPassword ){
         }else if(response.ok && response.status == 201 ) {
             window.location.href = "login.html"
         }
-        throw new Error('Erro na requisição');
     }).then(function(data){
-        console.log(data);
-        var mensagemErro = document.getElementById("mensagemErro")
-        mensagemErro.innerText = data.msg
-        mensagemErro.style.display = "block"
+        if( data != undefined ){
+            console.log(data);
+            var mensagemErro = document.getElementById("mensagemErro")
+            mensagemErro.innerText = data.msg
+            mensagemErro.style.display = "block"
+        }
     }).catch(function(error){
         console.log(error)
     })
