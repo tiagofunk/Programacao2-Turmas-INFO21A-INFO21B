@@ -19,16 +19,19 @@ function enviaPOST( email, password ){
     fetch(URL_AUTH,header)
     .then(function(response){
         if (!response.ok && response.status === 422) {
-            return response.json();            
+            response.json().then( (data)=>{
+                if( data != undefined ){
+                    console.log(data);
+                    var mensagemErro = document.getElementById("mensagemErro")
+                    mensagemErro.innerText = data.msg
+                    mensagemErro.style.display = "block"
+                }
+            })
         }else if(response.ok && response.status == 200 ) {
+            json.then(function(data){
+                localStorage.setItem('token', data.token);
+            })
             window.location.href = "index.html"
-        }
-    }).then(function(data){
-        if( data != undefined ){
-            console.log(data);
-            var mensagemErro = document.getElementById("mensagemErro")
-            mensagemErro.innerText = data.msg
-            mensagemErro.style.display = "block"
         }
     }).catch(function(error){
         console.log(error)

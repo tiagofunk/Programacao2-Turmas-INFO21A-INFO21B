@@ -110,10 +110,10 @@ app.post("/auth/user/", async(req,res)=>{
 
     const token = jwt.sign({
       id:usuario.id
-    }, secret, { expiresIn: 24*60*60 } )
+    }, secret, { expiresIn: "24h" } )
 
-  res.cookie('auth',token);
-  res.status(200).json({msg:"Autenticação realizada com sucesso!"})
+  //res.cookie('auth',token);
+  res.status(200).json({msg:"Autenticação realizada com sucesso!",token})
   }catch(error){
     console.log(error);
     return res.status(500).send({msg:"Erro no servidor. Tente novamente mais tarde!"})
@@ -129,7 +129,7 @@ app.get("/user/:id", checkToken, async(req,res) => {
   }
   
   // Adicionar depois para mostrar que só esta logado.
-  var infoToken = jwt.verify(req.cookies.auth, process.env.SECRET);
+  var infoToken = jwt.verify(req.headers.token, process.env.SECRET);
   console.log(infoToken.id)
   if( usuario.id != infoToken.id){
     return res.status(401).send({msg:"Acesso Negado!"})
@@ -139,8 +139,8 @@ app.get("/user/:id", checkToken, async(req,res) => {
 })
 
 function checkToken(req,res,next){
-  const token = req.cookies.auth;
-
+  const token = req.headers.token
+  console.log(">>>>>"+token);
   if (token) {
 
     jwt.verify(token, process.env.SECRET, function(err, token_data) {
