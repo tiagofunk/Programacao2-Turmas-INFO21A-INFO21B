@@ -16,24 +16,25 @@ function enviaPOST( email, password ){
             email, password
         })
     }
+    var status = 0
     fetch(URL_AUTH,header)
     .then(function(response){
-        if (!response.ok && response.status === 422) {
-            response.json().then( (data)=>{
-                if( data != undefined ){
-                    console.log(data);
-                    var mensagemErro = document.getElementById("mensagemErro")
-                    mensagemErro.innerText = data.msg
-                    mensagemErro.style.display = "block"
-                }
-            })
-        }else if(response.ok && response.status == 200 ) {
-            json.then(function(data){
-                localStorage.setItem('token', data.token);
-            })
+        status = response.status
+        return response.json()
+    }).then( function(data){
+        if (status == 422) {
+            if( data != undefined ){
+                var mensagemErro = document.getElementById("mensagemErro")
+                mensagemErro.innerText = data.msg
+                mensagemErro.style.display = "block"
+            }
+        }else if(status == 200 ) {
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('id', data.id)
             window.location.href = "index.html"
         }
-    }).catch(function(error){
+    })
+    .catch(function(error){
         console.log(error)
     })
 }
